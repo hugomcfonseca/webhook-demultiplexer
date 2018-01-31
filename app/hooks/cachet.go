@@ -26,7 +26,7 @@ func main() {
 	}
 }
 
-func tagsToComponents() (string, bool) {
+func tagToComponent(tag string) (string, bool) {
 	componentResp, resp, err := cachetClient.Components.GetAll()
 
 	if err != nil {
@@ -36,15 +36,26 @@ func tagsToComponents() (string, bool) {
 	return "", true
 }
 
-func reportIncident(name string, description string, status int, compId string, compStatus int) {
-	component := cachet.Incident{
-		Name:        name,
-		Description: description,
-		Status:      cachet.ComponentStatusOperational, // fixes me
-		Visible: 	 cachet.IncidentVisibilityPublic,
-		ComponentID: compId,
-		ComponentStatus: cachet.ComponentStatusPartialOutage // fixes me
+func checkComponentStatus(compID int) (int, bool) {
+
+	return 0, true
+}
+
+func reportIncident(name string, msg string, status int, compID int, compStatus int) bool {
+	component := &cachet.Incident{
+		Name:            name,
+		Message:         msg,
+		Status:          cachet.ComponentStatusOperational, // fixes me
+		Visible:         cachet.IncidentVisibilityPublic,
+		ComponentID:     compID,
+		ComponentStatus: cachet.ComponentStatusPartialOutage, // fixes me
 	}
 
-	incidentResp, resp, err := cachetClient.Incidents.Create()
+	incidentResp, resp, err := cachetClient.Incidents.Create(component)
+
+	return true
+}
+
+func updateIncident() {
+
 }

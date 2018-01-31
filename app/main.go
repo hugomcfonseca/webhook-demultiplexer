@@ -4,7 +4,7 @@ import (
 	"flag"
 	"net/http"
 
-	_ "github.com/gorilla/mux"
+	"github.com/gorilla/mux"
 	_ "github.com/hugomcfonseca/cachet"
 )
 
@@ -18,6 +18,12 @@ var (
 )
 
 func main() {
+	var webhookURL string
+
+	router := mux.NewRouter()
+	webhookURL = "http://localhost:8080/prefix/{id}"
+
+	router.HandleFunc(webhookURL, hookHandler)
 
 }
 
