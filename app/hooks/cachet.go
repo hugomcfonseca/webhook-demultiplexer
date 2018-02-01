@@ -8,10 +8,20 @@ import (
 	"github.com/hugomcfonseca/cachet"
 )
 
+type CachetConfig struct {
+	cachetURL string
+	authType  string
+	username  string
+	password  string
+	token     string
+}
+
 var cachetClient cachet.Client
 
-func main() {
-	cachetClient, err := cachet.NewClient("https://cachet.localhost", nil) // provide URL from cmdline
+func cachetMain() {
+	cachetConfig := CachetConfig{}
+
+	cachetClient, err := cachet.NewClient(cachetConfig.cachetURL, nil)
 
 	if err != nil {
 		fmt.Printf("Error creating Cachet client: %s", err)
