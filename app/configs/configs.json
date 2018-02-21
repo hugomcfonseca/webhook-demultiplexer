@@ -1,0 +1,16 @@
+{
+    "cachet": {
+        "url": "https://status.mydomain.com",
+        "auth_type": "token",
+        "username": "SECRET",
+        "password": "SECRET",
+        "token": "SECRET"
+    },
+    "jira": {
+        "url": "http://jira.mydomain.com",
+        "auth_type": "token",
+        "username": "SECRET",
+        "password": "SECRET",
+        "token": "SECRET"
+    }
+}
