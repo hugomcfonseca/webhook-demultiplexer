@@ -4,9 +4,9 @@ ARCHS = amd64
 all: build install
 
 build: deps
-	go build
+    go build
 
 deps:
-	go get -d -v -t ./...
+    go get -d -v -t ./...
 
 install:

@@ -18,10 +18,8 @@ type CachetConfig struct {
 var cachetClient cachet.Client
 
 // initClient set up a client to connect to Cachet API
-func initClient() {
-	cachetConfig := CachetConfig{}
-
-	cachetClient, err := cachet.NewClient(cachetConfig.cachetURL, nil)
+func initClient(config *CachetConfig) {
+	cachetClient, err := cachet.NewClient(config.cachetURL, nil)
 
 	if err != nil {
 		fmt.Printf("Error creating Cachet client: %s", err)
@@ -30,7 +28,7 @@ func initClient() {
 
 	_, resp, err := cachetClient.General.Ping()
 
-	if resp.StatusCode != 200 {
+	if resp.StatusCode != 200 || err == nil {
 		fmt.Printf("Cachet server is not reachable: %s", err)
 		return
 	}
@@ -40,7 +38,10 @@ func initClient() {
 func getComponentByTag(tag string) (bool, string) {
 	var errorMsg string
 
-	components, _, err := cachetClient.Components.GetAll()
+	queryString := &cachet.ComponentsQueryParams{
+		Name: tag,
+	}
+	components, _, err := cachetClient.Components.GetAll(queryString)
 
 	if err != nil {
 		return false, ""
@@ -91,9 +92,12 @@ func reportIncident(name string, msg string, status int, cID int, cStatus int) b
 	return true
 }
 
-// getIncidentByComponent gets all 
+// getIncidentByComponent gets all
 func getIncidentByComponent(cid int) (bool, int) {
-	incidents, _, err := cachetClient.Incidents.GetAll()
+	queryString := &cachet.IncidentsQueryParams{
+		ComponentID: cid,
+	}
+	incidents, _, err := cachetClient.Incidents.GetAll(queryString)
 
 	if err != nil {
 		return false, -1

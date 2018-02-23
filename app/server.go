@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	_ "github.com/hugomcfonseca/webhook-demultiplexer/apis"
+	//_ "github.com/hugomcfonseca/webhook-demultiplexer/apis"
 )
 
 const (
