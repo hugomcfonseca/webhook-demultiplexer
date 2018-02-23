@@ -1,16 +1,20 @@
 {
-    "cachet": {
-        "url": "https://status.mydomain.com",
-        "auth_type": "token",
-        "username": "SECRET",
-        "password": "SECRET",
-        "token": "SECRET"
-    },
-    "jira": {
-        "url": "http://jira.mydomain.com",
-        "auth_type": "token",
-        "username": "SECRET",
-        "password": "SECRET",
-        "token": "SECRET"
-    }
+    "configs": [
+        {
+            "target": "cachet",
+            "url": "https://dev.cachethq.io/",
+            "auth_type": "token",
+            "username": "SECRET",
+            "password": "SECRET",
+            "token": "SECRET"
+        },
+        {
+            "target": "jira",
+            "url": "http://jira.mydomain.com",
+            "auth_type": "token",
+            "username": "SECRET",
+            "password": "SECRET",
+            "token": "SECRET"
+        }
+    ]
 }

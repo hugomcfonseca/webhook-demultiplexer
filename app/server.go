@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	//_ "github.com/hugomcfonseca/webhook-demultiplexer/apis"
 )
 
 const (
@@ -19,20 +18,26 @@ const (
 )
 
 var (
-	auth    = flag.String("auth", "", "Authentication token that StatusCake webhook POSTs must match")
-	configs = flag.String("configs", "configs.json", "JSON file with configurations to target APIs")
-	address = flag.String("url", "0.0.0.0", "Domain or IP address where hookserver is listen")
-	port    = flag.Int("port", 8080, "Port where hookserver is listen")
-	prefix  = flag.String("prefix", "v1", "")
+	auth       = flag.String("auth", "", "Authentication token that StatusCake webhook POSTs must match")
+	configFile = flag.String("config", "configs.json", "JSON file with configurations to target APIs")
+	address    = flag.String("url", "0.0.0.0", "Domain or IP address where hookserver is listen")
+	port       = flag.Int("port", 8080, "Port where hookserver is listen")
+	prefix     = flag.String("prefix", "v1", "")
 )
 
-// Config set an object containing configurations by each destination API
-type Config struct {
+// TargetConfig set an object containing configurations by each destination API
+type TargetConfig struct {
+	Target   string `json:"target"`
 	URL      string `json:"url"`
 	AuthType string `json:"auth_type"`
 	Token    string `json:"token,omitempty"`
 	Username string `json:"username,omitempty"`
 	Password string `json:"password,omitempty"`
+}
+
+// Configs ...
+type Configs struct {
+	Configs []TargetConfig `json:"configs"`
 }
 
 func main() {
@@ -118,20 +123,44 @@ func listTargetsHandler(w http.ResponseWriter, r *http.Request) {
 func sendNotifyHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	log.Printf("Received hook request to %v with token %v\n", vars["application"])
+	log.Printf("Received hook request to %v\n", vars["application"])
 }
 
-// loadAppConfigs ...
-func loadAppConfigs(app string) ([]Config, error) {
-	var config []Config
+// loadTargetApis loads and parses configuration file.
+// Returns a client of every target API presented in configuration file.
+func loadTargetApis() (Configs, error) {
+	var configs Configs
+	//allApps := false
 
-	raw, err := ioutil.ReadFile(*configs)
+	raw, err := ioutil.ReadFile(*configFile)
 	if err != nil {
 		log.Println(err.Error())
-		return nil, err
+		return configs, err
 	}
 
-	json.Unmarshal(raw, &config)
+	json.Unmarshal(raw, &configs)
 
-	return config, err
+	return configs, err
+}
+
+// getTargetsClient ...
+func getTargetsClient(targetAPI string, conf *Configs) {
+
+	//switch app {
+	//case "all":
+	//	allApps = true
+	//case "cachet":
+	//	config := &apis.CachetConfig{
+	//		CachetURL: "",
+	//		AuthType:  "",
+	//		Token:     "",
+	//	}
+	//	cachetClient := apis.InitClient(config)
+	//
+	//	log.Printf("%+v%t", cachetClient, allApps)
+	//case "jira":
+	//
+	//default:
+	//
+	//}
 }

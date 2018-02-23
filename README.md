@@ -10,6 +10,15 @@ At the moment, it supports the following applications' API:
 
 By default, this application runs at the top of a Docker container and it is configured either using environment variables or read them from Vault. However, you may not want to use it in a container. To do it so, you just need to clone this project and install it in your target host using provided `Makefile` -- for future reference, we are call **standalone** to this running option.
 
+### How it works
+
+**webhook-demultiplexer** follows the following workflow everytime it receives a request from StatusCake:
+
+1. _POST_ request received from StatusCake. It is time to process and parse **body** to separate alert and authentication contents.
+2. Does the _POST_ have authorization to use accessed API's endpoint? Time to evaluate token received in the **body** of the request and check if is authorized.
+3. Extracts target application from endpoint, if any, and starts configurating client by parsing JSON configuration.
+4. Start sending alerts to target APIs by every tag present in _POST_ request.
+
 ### Standalone
 
 ### Docker
